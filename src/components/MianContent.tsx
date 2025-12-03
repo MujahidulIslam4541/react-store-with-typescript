@@ -60,8 +60,27 @@ const MainContent = () => {
         (product) => product.price <= maxPrice,
       );
     }
+
+    if (searchQuery) {
+      filterProducts = filterProducts.filter((product) =>
+        product.title.toLowerCase().includes(searchQuery.toLocaleLowerCase()),
+      );
+    }
+
+    switch (filter) {
+      case 'expensive':
+        return filterProducts.sort((a, b) => b.price - a.price);
+      case 'cheap':
+        return filterProducts.sort((a, b) => a.price - b.price);
+      case 'popular':
+        return filterProducts.sort((a, b) => a.rating - b.rating);
+      default:
+        return filterProducts;
+    }
   };
-  getFilterProducts();
+
+  const filterProducts = getFilterProducts();
+  console.log(filterProducts);
 
   return (
     <section>
