@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useFilter } from './useFilter';
 import { Tally3 } from 'lucide-react';
 import axios from 'axios';
+import BookCard from './BookCard';
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -123,7 +124,17 @@ const MainContent = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 px-10"></div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 px-10">
+          {filterProducts.map((product) => (
+            <BookCard
+              key={product}
+              id={product.id}
+              title={product.title}
+              image={product.thumbnail}
+              price={product.price}
+            ></BookCard>
+          ))}
+        </div>
       </div>
     </section>
   );
