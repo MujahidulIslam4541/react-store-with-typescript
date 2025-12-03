@@ -1,30 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFilter } from './useFilter';
 import { Tally3 } from 'lucide-react';
+import axios from 'axios';
 
-const MianContent = () => {
-  const { searchQuery, selectedCategory, minPrice, maxPrice } = useFilter();
+const MainContent = () => {
+  const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
+    useFilter();
 
-  const [product, setProduct] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    let url = '';
+
+    // Calculate skip value correctly
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    // Default products fetch
+    url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${skip}`;
+
+    // If keyword is selected → search API
+    if (keyword) {
+      url = `https://dummyjson.com/products/search?q=${keyword}`;
+    }
+
+    axios
+      .get(url)
+      .then((response) => {
+        setProducts(response.data.products);
+        console.log('Fetched products:', response.data.products);
+      })
+      .catch((error) => {
+        console.error('Data fetching error:', error);
+      });
+  }, [currentPage, keyword]);
 
   return (
     <section>
       <div className="mb-5">
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <div className="relative my-5 ml-10">
-            <button className=" border px-4 py-2 rounded-full flex items-center">
-              <Tally3 className="mr-2"></Tally3>
-
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="border px-4 py-2 rounded-full flex items-center"
+            >
+              <Tally3 className="mr-2" />
               {filter === 'all'
                 ? 'Filter'
-                : filter.charAt(0).toLocaleLowerCase() + filter.slice(1)}
+                : filter.charAt(0).toUpperCase() + filter.slice(1)}
             </button>
 
             {dropdownOpen && (
-              <div className="absolute bgh-white border border-gray-300 rounded mt-2 w-full sm:w-40">
+              <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40 shadow">
                 <button
                   onClick={() => setFilter('cheap')}
                   className="block px-4 py-2 w-full hover:bg-gray-200"
@@ -47,9 +77,12 @@ const MianContent = () => {
             )}
           </div>
         </div>
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 px-10"></div>
       </div>
     </section>
   );
 };
 
-export default MianContent;
+export default MainContent;
