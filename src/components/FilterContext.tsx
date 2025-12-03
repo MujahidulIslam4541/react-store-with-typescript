@@ -1,8 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  type ReactNode
-} from "react";
+import React, { createContext, useState, type ReactNode } from 'react';
 
 // Context-data type
 interface FilterContextType {
@@ -24,17 +20,19 @@ interface FilterContextType {
 
 // create context
 // eslint-disable-next-line react-refresh/only-export-components
-export const FilterContext = createContext<FilterContextType | undefined>(undefined);
+export const FilterContext = createContext<FilterContextType | undefined>(
+  undefined,
+);
 
 // Provider Component
 export const FilterProvider: React.FC<{ children: ReactNode }> = ({
-  children
+  children,
 }) => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
-  const [keyword, setKeyWord] = useState<string>("");
+  const [keyword, setKeyWord] = useState<string>('');
 
   return (
     <FilterContext.Provider
@@ -48,13 +46,10 @@ export const FilterProvider: React.FC<{ children: ReactNode }> = ({
         maxPrice,
         setMaxPrice,
         keyword,
-        setKeyWord
+        setKeyWord,
       }}
     >
       {children}
     </FilterContext.Provider>
   );
 };
-
-
-

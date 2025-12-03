@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useFilter } from "./useFilter";
+import { useEffect, useState } from 'react';
+import { useFilter } from './useFilter';
 
 // Product type
 interface Product {
@@ -22,35 +22,35 @@ const Sidebar = () => {
     setMinPrice,
     maxPrice,
     setMaxPrice,
-    setKeyWord
+    setKeyWord,
   } = useFilter();
 
   // Local state
   const [categories, setCategories] = useState<string[]>([]);
   const [keywords] = useState<string[]>([
-    "apple",
-    "watch",
-    "shoes",
-    "fashion",
-    "shirt"
+    'apple',
+    'watch',
+    'shoes',
+    'fashion',
+    'shirt',
   ]);
 
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://dummyjson.com/products");
+        const response = await fetch('https://dummyjson.com/products');
         const data: FetchResponse = await response.json();
 
         // Get unique categories
         const uniqueCategories = Array.from(
-          new Set(data.products.map((product) => product.category))
+          new Set(data.products.map((product) => product.category)),
         );
 
         console.log(data); // Debug: see the API data
         setCategories(uniqueCategories);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('Error fetching products:', error);
       }
     };
 
@@ -67,11 +67,11 @@ const Sidebar = () => {
   };
 
   const handleResetFilters = () => {
-    setSearchQuery("");
-    setSelectedCategory("");
+    setSearchQuery('');
+    setSelectedCategory('');
     setMinPrice(undefined);
     setMaxPrice(undefined);
-    setKeyWord("");
+    setKeyWord('');
   };
 
   return (
@@ -93,18 +93,22 @@ const Sidebar = () => {
           <input
             type="text"
             placeholder="Min"
-            value={minPrice ?? ""}
+            value={minPrice ?? ''}
             onChange={(e) =>
-              setMinPrice(e.target.value ? parseFloat(e.target.value) : undefined)
+              setMinPrice(
+                e.target.value ? parseFloat(e.target.value) : undefined,
+              )
             }
             className="border-2 border-gray-500 rounded w-full px-2"
           />
           <input
             type="text"
             placeholder="Max"
-            value={maxPrice ?? ""}
+            value={maxPrice ?? ''}
             onChange={(e) =>
-              setMaxPrice(e.target.value ? parseFloat(e.target.value) : undefined)
+              setMaxPrice(
+                e.target.value ? parseFloat(e.target.value) : undefined,
+              )
             }
             className="border-2 border-gray-500 rounded w-full px-2"
           />
