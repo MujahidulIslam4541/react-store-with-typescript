@@ -38,6 +38,31 @@ const MainContent = () => {
       });
   }, [currentPage, keyword]);
 
+  const getFilterProducts = () => {
+    let filterProducts = products;
+
+    if (selectedCategory) {
+      filterProducts = filterProducts.filter(
+        (product) => product.category === selectedCategory,
+      );
+
+      console.log(filterProducts);
+    }
+
+    if (minPrice !== undefined) {
+      filterProducts = filterProducts.filter(
+        (product) => product.price >= minPrice,
+      );
+    }
+
+    if (maxPrice !== undefined) {
+      filterProducts = filterProducts.filter(
+        (product) => product.price <= maxPrice,
+      );
+    }
+  };
+  getFilterProducts();
+
   return (
     <section>
       <div className="mb-5">
