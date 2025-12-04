@@ -1,37 +1,29 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  rating: number;
-  images: string[];
-}
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProduct } from "../redux/productSlice";
+import type { AppDispatch, RootState } from "../redux/store";
 
 export const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [product, setProduct] = useState<Product | null>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { data: product, loading, error } = useSelector(
+    (state: RootState) => state.product
+  );
 
   useEffect(() => {
     if (id) {
-      axios
-        .get(`https://dummyjson.com/products/${id}`)
-        .then((res) => {
-          setProduct(res.data);
-        })
-        .catch((error) => {
-          console.log("error featching product data", error);
-        });
+      dispatch(fetchProduct(id)); 
     }
-  }, [id]);
+  }, [dispatch, id]);
 
-  if (!product) {
-    return <h2>Loading...</h2>;
-  }
+  if (loading) return <h2>Loading...</h2>;
+  if (error) return <h2>{error}</h2>;
+
+  if (!product) return null;
 
   return (
     <div className="p-5 w-[60%]">
@@ -42,9 +34,13 @@ export const ProductPage = () => {
         Back
       </button>
 
-      <img src={product.images[0]} alt={product.title}  className="w-[50%] h-auto mb-5"/>
+      <img
+        src={product.images[0]}
+        alt={product.title}
+        className="w-[50%] h-auto mb-5"
+      />
 
-      <h1 className="text-2xl mb-4 font-bold"> {product.title}</h1>
+      <h1 className="text-2xl mb-4 font-bold">{product.title}</h1>
       <p className="w-[70%]">{product.description}</p>
 
       <div className="flex gap-4">
