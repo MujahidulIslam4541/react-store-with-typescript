@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useFilter } from './useFilter';
-import { Tally3 } from 'lucide-react';
-import axios from 'axios';
-import BookCard from './BookCard';
+import { useEffect, useState } from "react";
+import { useFilter } from "./useFilter";
+import { Tally3 } from "lucide-react";
+import axios from "axios";
+import BookCard from "./BookCard";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
     useFilter();
 
   const [products, setProducts] = useState<any[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const itemsPerPage = 12;
 
   useEffect(() => {
-    let url = '';
+    let url = "";
 
     // Calculate skip value correctly
     const skip = (currentPage - 1) * itemsPerPage;
@@ -32,10 +32,10 @@ const MainContent = () => {
       .get(url)
       .then((response) => {
         setProducts(response.data.products);
-        console.log('Fetched products:', response.data.products);
+        console.log("Fetched products:", response.data.products);
       })
       .catch((error) => {
-        console.error('Data fetching error:', error);
+        console.error("Data fetching error:", error);
       });
   }, [currentPage, keyword]);
 
@@ -44,36 +44,34 @@ const MainContent = () => {
 
     if (selectedCategory) {
       filterProducts = filterProducts.filter(
-        (product) => product.category === selectedCategory,
+        (product) => product.category === selectedCategory
       );
-
-      console.log(filterProducts);
     }
 
     if (minPrice !== undefined) {
       filterProducts = filterProducts.filter(
-        (product) => product.price >= minPrice,
+        (product) => product.price >= minPrice
       );
     }
 
     if (maxPrice !== undefined) {
       filterProducts = filterProducts.filter(
-        (product) => product.price <= maxPrice,
+        (product) => product.price <= maxPrice
       );
     }
 
     if (searchQuery) {
       filterProducts = filterProducts.filter((product) =>
-        product.title.toLowerCase().includes(searchQuery.toLocaleLowerCase()),
+        product.title.toLowerCase().includes(searchQuery.toLocaleLowerCase())
       );
     }
 
     switch (filter) {
-      case 'expensive':
+      case "expensive":
         return filterProducts.sort((a, b) => b.price - a.price);
-      case 'cheap':
+      case "cheap":
         return filterProducts.sort((a, b) => a.price - b.price);
-      case 'popular':
+      case "popular":
         return filterProducts.sort((a, b) => a.rating - b.rating);
       default:
         return filterProducts;
@@ -120,27 +118,27 @@ const MainContent = () => {
               className="border px-4 py-2 rounded-full flex items-center"
             >
               <Tally3 className="mr-2" />
-              {filter === 'all'
-                ? 'Filter'
+              {filter === "all"
+                ? "Filter"
                 : filter.charAt(0).toUpperCase() + filter.slice(1)}
             </button>
 
             {dropdownOpen && (
               <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40 shadow">
                 <button
-                  onClick={() => setFilter('cheap')}
+                  onClick={() => setFilter("cheap")}
                   className="block px-4 py-2 w-full hover:bg-gray-200"
                 >
                   Cheap
                 </button>
                 <button
-                  onClick={() => setFilter('expensive')}
+                  onClick={() => setFilter("expensive")}
                   className="block px-4 py-2 w-full hover:bg-gray-200"
                 >
                   Expensive
                 </button>
                 <button
-                  onClick={() => setFilter('popular')}
+                  onClick={() => setFilter("popular")}
                   className="block px-4 py-2 w-full hover:bg-gray-200"
                 >
                   Popular
@@ -182,7 +180,7 @@ const MainContent = () => {
                 key={page}
                 onClick={() => handlePageChange(page)}
                 className={`border px-4 py-2 mx-1 rounded-full ${
-                  page === currentPage ? 'bg-black text-white' : ''
+                  page === currentPage ? "bg-black text-white" : ""
                 }`}
               >
                 {page}
