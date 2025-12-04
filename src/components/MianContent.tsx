@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useFilter } from "./useFilter";
-import { Tally3 } from "lucide-react";
+import { ShoppingCart, Tally3 } from "lucide-react";
 import axios from "axios";
 import BookCard from "./BookCard";
+
+// redux imports
+import { useDispatch, useSelector } from "react-redux";
+import { incrementWishlist } from "../redux/Wishlist";
+import type { RootState } from "../redux/store";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -14,16 +19,16 @@ const MainContent = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const itemsPerPage = 12;
 
+  // REDUX WISHLIST STATE
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state: RootState) => state.wishlist.count);
+
   useEffect(() => {
     let url = "";
-
-    // Calculate skip value correctly
     const skip = (currentPage - 1) * itemsPerPage;
 
-    // Default products fetch
     url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${skip}`;
 
-    // If keyword is selected → search API
     if (keyword) {
       url = `https://dummyjson.com/products/search?q=${keyword}`;
     }
@@ -32,7 +37,6 @@ const MainContent = () => {
       .get(url)
       .then((response) => {
         setProducts(response.data.products);
-        console.log("Fetched products:", response.data.products);
       })
       .catch((error) => {
         console.error("Data fetching error:", error);
@@ -62,7 +66,7 @@ const MainContent = () => {
 
     if (searchQuery) {
       filterProducts = filterProducts.filter((product) =>
-        product.title.toLowerCase().includes(searchQuery.toLocaleLowerCase())
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -72,7 +76,7 @@ const MainContent = () => {
       case "cheap":
         return filterProducts.sort((a, b) => a.price - b.price);
       case "popular":
-        return filterProducts.sort((a, b) => a.rating - b.rating);
+        return filterProducts.sort((a, b) => b.rating - a.rating);
       default:
         return filterProducts;
     }
@@ -81,7 +85,7 @@ const MainContent = () => {
   const totalProducts = 100;
   const totalPages = Math.ceil(totalProducts / itemsPerPage);
 
-  const filterProducts = getFilterProducts();
+  const filterProductsList = getFilterProducts();
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
@@ -94,14 +98,6 @@ const MainContent = () => {
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
 
-    if (currentPage - 2 < 1) {
-      endPage = Math.min(totalPages, endPage + (2 - currentPage - 1));
-    }
-
-    if (currentPage + 2 > totalPages) {
-      startPage = Math.min(1, startPage + (2 - totalPages - currentPage));
-    }
-
     for (let page = startPage; page <= endPage; page++) {
       buttons.push(page);
     }
@@ -112,6 +108,7 @@ const MainContent = () => {
     <section>
       <div className="mb-5">
         <div className="flex flex-col sm:flex-row justify-between items-center">
+          {/* filter dropdown */}
           <div className="relative my-5 ml-10">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -124,7 +121,7 @@ const MainContent = () => {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40 shadow">
+              <div className="absolute bg-white border rounded mt-2 w-full sm:w-40 shadow">
                 <button
                   onClick={() => setFilter("cheap")}
                   className="block px-4 py-2 w-full hover:bg-gray-200"
@@ -146,24 +143,39 @@ const MainContent = () => {
               </div>
             )}
           </div>
+
+          {/* Wishlist button using Redux */}
+          <button
+            onClick={() => dispatch(incrementWishlist())}
+            className="bg-black text-white border rounded-xl px-4 py-2"
+          >
+            Wishlist
+          </button>
+
+          {/* Cart Icon Badge */}
+          <div className="relative">
+            <ShoppingCart className="w-8 h-8" />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {wishlist}
+            </span>
+          </div>
         </div>
 
-        {/* Product Grid */}
+        {/* product grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 px-10">
-          {filterProducts.map((product) => (
+          {filterProductsList.map((product) => (
             <BookCard
-              key={product}
+              key={product.id}
               id={product.id}
               title={product.title}
               image={product.thumbnail}
               price={product.price}
-            ></BookCard>
+            />
           ))}
         </div>
 
-        {/* pegination */}
+        {/* pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
-          {/* previous */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -172,9 +184,7 @@ const MainContent = () => {
             Previous
           </button>
 
-          {/* 1,2,3,4...... */}
           <div className="flex flex-wrap justify-center">
-            {/* pegination button */}
             {getPeginationButtons().map((page) => (
               <button
                 key={page}
@@ -188,7 +198,6 @@ const MainContent = () => {
             ))}
           </div>
 
-          {/* next btn */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
