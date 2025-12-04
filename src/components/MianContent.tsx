@@ -149,7 +149,7 @@ const MainContent = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 px-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 px-10">
           {filterProducts.map((product) => (
             <BookCard
               key={product}

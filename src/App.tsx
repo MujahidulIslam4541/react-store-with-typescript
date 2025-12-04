@@ -2,6 +2,8 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import MianContent from "./components/MianContent";
 import { ProductPage } from "./components/ProductPage";
+import TopSeller from "./components/TopSeller";
+import PopularBlogs from "./components/PopularBolgs";
 
 export default function App() {
   return (
@@ -14,6 +16,11 @@ export default function App() {
             <Route path="/" element={<MianContent></MianContent>}></Route>
             <Route path="/product/:id" element={<ProductPage></ProductPage>}></Route>
           </Routes>
+
+          <div>
+            <TopSeller></TopSeller>
+            <PopularBlogs></PopularBlogs>
+          </div>
         </div>
       </div>
     </Router>
