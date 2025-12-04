@@ -75,7 +75,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 p-5 shadow h-screen">
+    <div className="w-80 p-5 shadow h-screen">
       {/* Heading */}
       <h2 className="text-xl font-bold text-center">React Store</h2>
 

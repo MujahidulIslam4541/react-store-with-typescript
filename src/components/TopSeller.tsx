@@ -40,7 +40,7 @@ const handleFollowing = (index: number) => {
 };
 
   return (
-    <div className="bgh-white p-5 mx-5 mt-20 border w-92 rounded">
+    <div className="bg-white p-5  mt-20 border w-92 rounded">
       <h2 className="text-xl font-bold mb-5">Top sellers</h2>
 
       <ul>
