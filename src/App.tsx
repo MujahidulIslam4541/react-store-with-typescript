@@ -4,6 +4,7 @@ import MianContent from "./components/MianContent";
 import { ProductPage } from "./components/ProductPage";
 import TopSeller from "./components/TopSeller";
 import PopularBlogs from "./components/PopularBolgs";
+import AddToCart from "./components/AddToCart";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<MianContent></MianContent>}></Route>
             <Route path="/product/:id" element={<ProductPage></ProductPage>}></Route>
+            <Route path="/addToCart" element={<AddToCart></AddToCart>}></Route>
           </Routes>
 
           <div>

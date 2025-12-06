@@ -3,11 +3,12 @@ import { useFilter } from "./useFilter";
 import { ShoppingCart, Tally3 } from "lucide-react";
 import axios from "axios";
 import BookCard from "./BookCard";
+import { Link } from "react-router-dom";
 
 // redux imports
-import { useDispatch, useSelector } from "react-redux";
-import { incrementWishlist } from "../redux/Wishlist";
-import type { RootState } from "../redux/store";
+// import { useDispatch, useSelector } from "react-redux";
+// import { incrementWishlist } from "../redux/Wishlist";
+// import type { RootState } from "../redux/store";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -17,11 +18,12 @@ const MainContent = () => {
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [addCart, setAddCart] = useState(0);
   const itemsPerPage = 12;
 
   // REDUX WISHLIST STATE
-  const dispatch = useDispatch();
-  const wishlist = useSelector((state: RootState) => state.wishlist.count);
+  // const dispatch = useDispatch();
+  // const wishlist = useSelector((state: RootState) => state.wishlist.count);
 
   useEffect(() => {
     let url = "";
@@ -144,20 +146,14 @@ const MainContent = () => {
             )}
           </div>
 
-          {/* Wishlist button using Redux */}
-          <button
-            onClick={() => dispatch(incrementWishlist())}
-            className="bg-black text-white border rounded-xl px-4 py-2"
-          >
-            Wishlist
-          </button>
-
           {/* Cart Icon Badge */}
           <div className="relative">
-            <ShoppingCart className="w-8 h-8" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              {wishlist}
-            </span>
+            <Link to='/addToCart'>
+              <ShoppingCart className="w-8 h-8" />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                {addCart}
+              </span>
+            </Link>
           </div>
         </div>
 
@@ -170,6 +166,7 @@ const MainContent = () => {
               title={product.title}
               image={product.thumbnail}
               price={product.price}
+              onaddToCart={() => setAddCart(addCart + 1)}
             />
           ))}
         </div>
