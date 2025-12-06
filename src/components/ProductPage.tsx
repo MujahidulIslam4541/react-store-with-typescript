@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProduct } from "../redux/productSlice";
+import { fetchProduct } from "@/redux/ProductSlice";
 import type { AppDispatch, RootState } from "../redux/store";
 
 export const ProductPage = () => {

@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 
-interface BookingCardProps {
+interface BookCardProps {
   id: string;
-  image: string;
   title: string;
   price: number;
-  onaddToCart:()=>void;
+  image: string;
+  onAddToCart: () => void;
 }
-const BookCard: React.FC<BookingCardProps> = ({ id, image, title, price,onaddToCart }) => {
 
+const BookCard: React.FC<BookCardProps> = ({ id, title, price, image, onAddToCart }) => {
   return (
     <div className="border p-4 rounded">
       <img src={image} alt={title} className="w-full h-32 object-cover mb-2" />
@@ -19,9 +19,12 @@ const BookCard: React.FC<BookingCardProps> = ({ id, image, title, price,onaddToC
           to={`/product/${id}`}
           className="px-4 py-1 border rounded-xl bg-black text-white"
         >
-           Details
+          Details
         </Link>
-        <button onClick={onaddToCart} className="px-4 py-1 border rounded-xl bg-black text-white">
+        <button
+          onClick={onAddToCart}
+          className="px-4 py-1 border rounded-xl bg-black text-white"
+        >
           Add to Cart
         </button>
       </div>

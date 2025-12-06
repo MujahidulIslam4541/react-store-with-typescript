@@ -4,7 +4,7 @@ import MianContent from "./components/MianContent";
 import { ProductPage } from "./components/ProductPage";
 import TopSeller from "./components/TopSeller";
 import PopularBlogs from "./components/PopularBolgs";
-import AddToCart from "./components/AddToCart";
+import AddToCart from "./components/CartTable";
 
 export default function App() {
   return (
@@ -15,7 +15,13 @@ export default function App() {
         <div className="flex justify-between flex-wrap rounded w-full">
           <Routes>
             <Route path="/" element={<MianContent></MianContent>}></Route>
-            <Route path="/product/:id" element={<ProductPage></ProductPage>}></Route>
+            <Route
+              path="/product/:id"
+              element={<ProductPage></ProductPage>}
+            ></Route>
+          </Routes>
+
+          <Routes>
             <Route path="/addToCart" element={<AddToCart></AddToCart>}></Route>
           </Routes>
 
